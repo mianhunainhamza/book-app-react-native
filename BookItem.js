@@ -1,8 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 
-import defaultCoverPhotoUri from './assets/cover.jpeg';
-
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   const day = date.getDate().toString().padStart(2, '0');
@@ -11,8 +9,8 @@ const formatDate = (dateString) => {
   return `${day}-${month}-${year}`;
 };
 
-const BookItem = ({ book, isExpanded, onToggleExpansion, isRTL }) => {
-  const { title, author, isPublished, isArabic, description } = book;
+const BookItem = ({ book, isExpanded, onToggleExpansion, isRTL, baseCoverPhotoUrl }) => {
+  const { title, author, isPublished, isArabic, description, coverPhoto } = book;
 
   // Convert titles to Urdu if in RTL mode
   let urduTitle = '';
@@ -46,10 +44,13 @@ const BookItem = ({ book, isExpanded, onToggleExpansion, isRTL }) => {
     outputRange: [0, 100], // Adjust the height as needed
   });
 
+  // Concatenate base URL with cover photo URL
+  const coverPhotoUri = `${baseCoverPhotoUrl}/${book.coverPhotoUri}`;
+
   return (
     <TouchableOpacity onPress={handleToggleExpansion}>
       <View style={[styles.container, isRTL && styles.containerRTL]}>
-        <Image source={defaultCoverPhotoUri} style={styles.coverImage} />
+        <Image source={{ uri: coverPhotoUri }} style={styles.coverImage} />
         <View style={styles.infoContainer}>
           <Text style={styles.title}>{urduTitle || title}</Text>
           <Text style={[styles.author, isRTL && styles.authorRTL]}>{isRTL ? 'تصنیف: ' : 'By '}{author.name}</Text>

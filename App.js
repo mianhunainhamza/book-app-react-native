@@ -9,10 +9,6 @@ const App = () => {
   const { loading, error, books } = useBookData();
   const [expandedBookId, setExpandedBookId] = useState(null);
 
-  const filteredBooks = books ? books.filter(book =>
-    book.title.toLowerCase().includes(searchQuery.toLowerCase())
-  ) : [];
-
   const toggleRTL = () => {
     setIsRTL(!isRTL);
   };
@@ -39,15 +35,16 @@ const App = () => {
       </View>
       <FlatList
         style={styles.scrollView}
-        data={filteredBooks}
+        data={books}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <BookItem
             book={item}
-            // coverPhotoUri={item.coverPhotoUri} // Pass cover photo URI
+            baseCoverPhotoUrl="https://dev.iqrakitab.net/" // Pass the base URL here
             isExpanded={expandedBookId === item._id}
             onToggleExpansion={() => toggleBookExpansion(item._id)}
-            isRTL={isRTL} // Pass RTL mode as a prop to BookItem
+            isRTL={isRTL}
+            key={item._id} // Adding key prop for each BookItem
           />
         )}
       />
@@ -85,7 +82,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     paddingVertical: 12,
-    borderRadius:20,
+    borderRadius: 20,
     paddingHorizontal: 12,
     backgroundColor: '#F3EEEE', // Background color
     borderWidth: 1,
